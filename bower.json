@@ -1,0 +1,20 @@
+{
+  "name": "mediaupload",
+  "version": "0.1.0",
+  "homepage": "https://github.com/rdeutz/simple",
+  "authors": [
+    "Robert Deutz <rdeutz@googlemail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/bower",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "blueimp-file-upload": "~9.12.0"
+  }
+}

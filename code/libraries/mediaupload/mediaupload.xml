@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="library" method="upgrade" version="2.5">
+    <name>Mediaupload - Library</name>
+    <libraryname>mediaupload</libraryname>
+    <author>Robert Deutz</author>
+    <authorEmail>rdeutz@googlemail.com</authorEmail>
+    <authorUrl>www.robert-deutz.de</authorUrl>
+    <copyright>Robert Deutz</copyright>
+    <creationDate>June 2016</creationDate>
+    <license>GNU/GPL</license>
+    <version>1.0.0</version>
+    <description>Mediaupload library</description>
+    <files>
+        <folder>Mediaupload</folder>
+        <folder>form</folder>
+        <filename>LICENSE</filename>
+        <filename>library.php</filename>
+    </files>
+
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.lib_Mediaupload.ini</language>
+    </languages>
+</extension>
