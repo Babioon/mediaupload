@@ -11,8 +11,16 @@ extract($displayData);
  *  $text             : (string) label text
  *  $required         : (boolean) required or not
  */
+
+$titletag = '';
+
+if ($title != '')
+{
+	$titletag = ' title="' . $title . '"';
+}
+
 ?>
-<label id="<?php echo $id;?>-lbl" for="file<?php echo $id;?>" class="<?php echo $class;?>"<?php echo $title == '' ? '' : 'title="' . $title . '"';?>
+<label id="<?php echo $id;?>-lbl" for="file<?php echo $id;?>" class="<?php echo $class;?>"<?php echo $titletag;?>>
 	<?php echo $text;?>
 	<?php if($required) :?>
 		<span class="star">&#160;*</span>
