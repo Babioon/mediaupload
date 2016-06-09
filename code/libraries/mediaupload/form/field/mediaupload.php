@@ -196,6 +196,7 @@ class MediauploadFormFieldMediaupload extends JFormField
 		
 		$data =  array(
 			'id'            => $this->id,
+			'name'          => $this->name,
 			'value'         => $this->value,
 			'showalttext'   => $this->showalttext,
 			'alttext'       => $this->alttext,
@@ -229,7 +230,7 @@ class MediauploadFormFieldMediaupload extends JFormField
 						Mediaupload.Upload.basedir     = '{$baseUploadDir}';
 						Mediaupload.Upload.placeholder = '{$basedir}/media/mediaupload/images/placeholder.png';
 						Mediaupload.Upload.spinner     = '{$basedir}/media/mediaupload/images/loading_small.gif';
-						Mediaupload.Upload.url         = 'index.php?option=com_mycomponent&task=upload.save&format=raw';
+						Mediaupload.Upload.url         = 'index.php?option=com_knowledgeriver&task=upload.save&format=raw';
 				});
 		";
 

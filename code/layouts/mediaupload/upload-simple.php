@@ -6,6 +6,7 @@ extract($displayData);
  * Layout variables
  * ---------------------
  *  $id               : (string) Field ID
+ *  $name             : (string) Field name
  * 	$value            : (string) Filename
  *  $filetypes        : (integer)  The file Type
  *  $showalttext      : (boolean) show alttext or not
@@ -19,11 +20,11 @@ extract($displayData);
 			<input id="<?php echo $id;?>alttext" type="text" class="form-control" name="<?php echo $id;?>alttext" value="<?php echo $alttext; ?>">
 		</div>
 		<div class="col-xs-3 col-sm-4 col-md-4 col-lg-4">
-			<input id="<?php echo $id;?>" type="text" name="<?php echo $id;?>" value="<?php echo $value;?>" class="form-control" readonly="readonly">
+			<input id="<?php echo $id;?>" type="text" name="<?php echo $name;?>" value="<?php echo $value;?>" class="form-control" readonly="readonly">
 		</div>
 		<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
 <?php else : ?>
-		<input id="<?php echo $id;?>" type="hidden" name="<?php echo $id;?>" value="<?php echo $value;?>">
+		<input id="<?php echo $id;?>" type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>">
 <?php endif; ?>
 			
 			<div class="actions<?php echo $filetypes == 2 ? ' pdf' : ' image';?>">
