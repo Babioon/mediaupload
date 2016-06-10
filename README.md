@@ -17,11 +17,11 @@ class MyComponentControllerUpload extends JControllerLegacy
 	 */
 	public function save()
 	{
-		$componentConfiguration = JComponentHelper::getComponent('com_mycomponent')->params;
+		$path           = JFactory::getApplication()->getUserState('mycomponent.uploaddir');
+		$realbasefolder = JPATH_BASE . '/' . $path;
+		$imagefolder    = $path;
+
 		$input = JFactory::getApplication()->input;
-		$realbasefolder = JPATH_BASE . '/images/' . $componentConfiguration->get('uploadfolder') . '/';
-		$imagefolder =  'images/' . $componentConfiguration->get('uploadfolder') . '/';
-		
 		$filestypes = $input->getUint('filetypes',1);
 		
 		switch($filestypes)
@@ -55,3 +55,35 @@ class MyComponentControllerUpload extends JControllerLegacy
 }
 ```
 
+To get the right path you need to implement a plugin or overwrite the preprocessForm function within your model
+
+```
+	protected function preprocessForm(JForm $form, $data, $group = 'content')
+	{
+		parent::preprocessForm($form, $data, $group);
+
+		$conf = $this->getComponentConfiguration();
+		$path = 'images/' . $conf->get('uploadfolder') . '/';
+		$form->setFieldAttribute('imagefile', 'directory', $path);
+		
+		JFactory::getApplication()->setUserState('mycomponent.uploaddir', $path);
+	}
+
+```
+
+Your config.xml should have 
+
+```
+		<field
+			name="uploadfolder"
+			type="folderlist"
+			class="form-control"
+			labelClass="control-label"
+			default=""
+			label="Uploadfolder"
+			directory="images"
+			hide_none="true"
+		/>
+
+
+```
