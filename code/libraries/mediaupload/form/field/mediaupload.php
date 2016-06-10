@@ -186,7 +186,7 @@ class MediauploadFormFieldMediaupload extends JFormField
 		{
 			$data =  array(
 							'id' => $this->id,
-							'value' => $this->value,
+							'value' => basename($this->value),
 							'thumbnailfolder' => $thumbnailfolder,
 							'placeholderimage' => $basedir . '/media/mediaupload/images/placeholder.png'
 						);
@@ -314,7 +314,7 @@ class MediauploadFormFieldMediaupload extends JFormField
 	private function getBaseUploadDirectory()
 	{
 		$basedir       = JUri::base(true);
-		$baseUploadDir = $basedir . '/images';
+		$baseUploadDir = $basedir ;
 
 		if (!empty($this->directory))
 		{
