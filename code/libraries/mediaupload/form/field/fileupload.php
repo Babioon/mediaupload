@@ -1,6 +1,5 @@
 <?php
 
-
 defined('JPATH_PLATFORM') or die;
 
 /**
@@ -8,14 +7,14 @@ defined('JPATH_PLATFORM') or die;
  * Provides a upload mechanism,
  * needs some more magic on component side
  */
-class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
+class MediauploadFormFieldFileupload extends Mediaupload\Field\Field
 {
 	/**
 	 * The form field type.
 	 *
 	 * @var    string
 	 */
-	protected $type = 'Mediaupload';
+	protected $type = 'Fileupload';
 
 	/**
 	 * The initialised state of the document object.
@@ -40,11 +39,6 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 	protected $uploadbuttontext = '';
 
 	/**
-	 * @var bool
-	 */
-	protected $showalttext = false;
-
-	/**
 	 * @var string
 	 */
 	protected $alttext = '';
@@ -53,6 +47,11 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 	 * @var string
 	 */
 	protected $directory = '';
+
+	/**
+	 * @var string
+	 */
+	protected $uploadendpoint = '';
 
 	/**
 	 * Method to get certain otherwise inaccessible properties from the form field object.
@@ -65,12 +64,13 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 	{
 		switch ($name)
 		{
-			case 'filetype':
-			case 'placeholder':
-			case 'uploadbuttontext':
-			case 'edit':
-			case 'alttext':
-			case 'directory':
+		case 'filetype':
+		case 'placeholder':
+		case 'uploadendpoint':
+		case 'uploadbuttontext':
+		case 'edit':
+		case 'alttext':
+		case 'directory':
 			return $this->$name;
 		}
 
@@ -89,18 +89,19 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 	{
 		switch ($name)
 		{
-			case 'filetype':
-			case 'uploadbuttontext':
-			case 'alttext':
-				$this->$name = (string) $value;
-				break;
+		case 'filetype':
+		case 'uploadbuttontext':
+		case 'uploadendpoint':
+		case 'alttext':
+			$this->$name = (string) $value;
+			break;
 
-			case 'placeholder':
-			case 'directory':
-			case 'url':
-			case 'debug':
-			default:
-				parent::__set($name, $value);
+		case 'placeholder':
+		case 'directory':
+		case 'url':
+		case 'debug':
+		default:
+			parent::__set($name, $value);
 		}
 	}
 
@@ -123,7 +124,7 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 
 		if ($result == true)
 		{
-			$fields = ['uploadbuttontext', 'filetype', 'alttext', 'directory', 'url' ];
+			$fields = ['uploadbuttontext', 'filetype', 'alttext', 'directory', 'url', 'uploadendpoint' ];
 
 			foreach ($fields AS $field)
 			{
@@ -136,7 +137,7 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 			// Default value for debug
 			$this->debug = false;
 
-			$fields = ['placeholder', 'showalttext'];
+			$fields = ['placeholder'];
 
 			foreach ($fields AS $field)
 			{
@@ -160,51 +161,63 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 	{
 		$this->init();
 
-		$basedir = JUri::base(true);
-
-		$baseUploadDir   = $this->getBaseUploadDirectory();
-		$thumbnailfolder = $baseUploadDir . '/thumbnail';
-
-		$filetypes = $this->mapFiletypeToUrlParameterValue();
-
 		$script = "
-			jQuery( document ).ready(function( ) {
-				Mediaupload.Upload.add('{$this->id}','{$filetypes}');
+			jQuery( document ).ready(function($) {
+				$('#file{$this->id}').fileupload({
+					url: '{$this->uploadendpoint}',
+					dataType: 'json',
+					done: function (e, data) {
+						if(data.result.files[0].error)
+						{
+							alert(data.result.files[0].error);
+							$('#progress{$this->id} .bar').css('width', 0);
+							
+							return;
+						}
+
+						$('#input{$this->id}').val(JSON.stringify(data.result.files));
+						$('#progress{$this->id}').fadeOut();
+						$('#donemessage{$this->id}').show();
+					},
+					progressall: function (e, data) {
+						$('#progress{$this->id}').show();
+						var progress = parseInt(data.loaded / data.total * 100, 10);
+						$('#progress{$this->id} .bar').css(
+							'width',
+							progress + '%'
+						);
+					},
+					maxChunkSize: 10000000,
+					formData: []
+				}).prop('disabled', !$.support.fileInput)
+					.parent().addClass($.support.fileInput ? undefined : 'disabled');
 			  });
 		";
+
 		JFactory::getDocument()->addScriptDeclaration($script);
 
 		$html = [];
-		
+
 		$data =  array(
-			'filetypes'     => $filetypes
+			'filetypes'     => 2
 		);
 
 		$html[] = $this->getRenderer('mediaupload.area-open')->render($data);
 
-		if ($this->placeholder)
-		{
-			$data =  array(
-							'id' => $this->id,
-							'value' => basename($this->value),
-							'thumbnailfolder' => $thumbnailfolder,
-							'placeholderimage' => $basedir . '/media/mediaupload/images/placeholder.png'
-						);
-
-			$html[] = $this->getRenderer('mediaupload.placeholder')->render($data);
-		}
-		
 		$data =  array(
 			'id'            => $this->id,
 			'name'          => $this->name,
 			'value'         => $this->value,
-			'showalttext'   => $this->showalttext,
 			'alttext'       => $this->alttext,
-			'filetypes'     => $filetypes
+			'required'      => $this->required
 		);
-		
-		$html[] = $this->getRenderer('mediaupload.upload-simple')->render($data);
-		
+
+		$html[] = $this->getRenderer('mediaupload.upload-file')->render($data);
+
+		$html[] = $this->getRenderer('mediaupload.progress-bar')->render($data);
+
+		$html[] = $this->getRenderer('mediaupload.done-message')->render($data);
+
 		$html[] = $this->getRenderer('mediaupload.area-close')->render(array());
 
 		return implode("\n", $html);
@@ -220,66 +233,11 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 		$doc           = JFactory::getDocument();
 		$basedir       = JUri::base(true);
 
-		$baseUploadDir = $this->getBaseUploadDirectory();
-
 		$doc->addStyleSheet($basedir . '/media/mediaupload/css/main.css');
 		$doc->addScript($basedir . '/media/mediaupload/js/mediaupload.js');
-
-		$script = "
-				jQuery( document ).ready(function( ) {
-						Mediaupload.Upload.basedir     = '{$baseUploadDir}';
-						Mediaupload.Upload.placeholder = '{$basedir}/media/mediaupload/images/placeholder.png';
-						Mediaupload.Upload.spinner     = '{$basedir}/media/mediaupload/images/loading_small.gif';
-						Mediaupload.Upload.url         = 'index.php?option=com_knowledgeriver&task=upload.save&format=raw';
-				});
-		";
-
-		JFactory::getDocument()->addScriptDeclaration($script);
 
 		self::$initialised = true;
 
 		return true;
-	}
-
-	/**
-	 * maps a filetype string to an integer
-	 *
-	 * @return  int  filetype
-	 */
-	protected function mapFiletypeToUrlParameterValue()
-	{
-		switch ($this->filetype)
-		{
-			default:
-			case 'image':
-				$filetypes = 1;
-				break;
-
-			case 'pdf':
-				$filetypes = 2;
-				break;
-		}
-
-		return $filetypes;
-	}
-
-	/**
-	 * returns the base directory for file uploads
-	 *
-	 * @return string
-	 */
-	private function getBaseUploadDirectory()
-	{
-		$basedir       = JUri::base(true);
-		$baseUploadDir = $basedir ;
-
-		if (!empty($this->directory))
-		{
-			$baseUploadDir .= "/" . $this->directory;
-
-			return $baseUploadDir;
-		}
-
-		return $baseUploadDir;
 	}
 }
