@@ -8,7 +8,7 @@ extract($displayData);
 * 	$filetype     : (integer)  The file Type
 */
 
-$fileclass = $filetypes == 2 ? ' pdf' : ' image';
+$fileclass = $filetypes == 2 ? ' file' : ' image';
 
 ?>
 <div class="uploadarea<?php echo $fileclass;?>">

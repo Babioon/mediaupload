@@ -37,7 +37,10 @@ class MyComponentControllerUpload extends JControllerLegacy
 		$options =  [
 			'upload_dir' => $realbasefolder,
 			'upload_url' => $imagefolder,
-			'accept_file_types' => $accept_file_types
+			'accept_file_types' => $accept_file_types,
+			'access_control_allow_methods' => array(
+				'POST'
+			)
 		];
 		
 		try {
@@ -86,4 +89,17 @@ Your config.xml should have
 		/>
 
 
+```
+
+If you use the fileupload fieldtyp, you need to configure an URL endpoint where the uploaded files are posted to:
+
+```
+		<field
+				name="file"
+				type="mediaupload.fileupload"
+				class="form-control"
+				default=""
+				label="COM_COOLUPLOAD_UPLOAD_SELECT_FILE"
+				uploadendpoint="index.php?option=com_coolupload&amp;task=file.uploadChunk&amp;format=raw"
+		/>
 ```

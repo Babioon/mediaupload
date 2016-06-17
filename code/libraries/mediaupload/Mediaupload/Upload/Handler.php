@@ -77,7 +77,6 @@ class Handler extends \UploadHandler
 		*/
 		$name = trim(basename(stripslashes($name)), ".\x00..\x20");
 		$name = strtolower($name);
-		$name = preg_replace('/[^a-z|^\\-|^_|^0-9]/', '', $name);
 		$name = str_replace(' ', '_', $name);
 
 		// Use a timestamp for empty filenames
