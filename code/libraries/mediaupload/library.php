@@ -1,9 +1,9 @@
 <?php
 /**
- * @package     Sample
+ * @package     mediaupload
  * @subpackage  Library
  *
- * @copyright   Copyright (C) 2013 Roberto Segura. All rights reserved.
+ * @copyright   Robert Deutz <rdeutz@googlemail.com>
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -22,10 +22,11 @@ JLoader::setup();
 JLoader::registerPrefix('Mediaupload', dirname(__FILE__));
 
 require_once __DIR__ . '/Mediaupload/Upload/Handler.php';
+require_once __DIR__ . '/Mediaupload/Field/Field.php';
 
 // Common fields
 JFormHelper::addFieldPath(dirname(__FILE__) . '/form/field');
 
 // Load library language
 $lang = JFactory::getLanguage();
-$lang->load('lib_mediaupload', __DIR__);
+$lang->load('lib_mediaupload', JPATH_ADMINISTRATOR);
