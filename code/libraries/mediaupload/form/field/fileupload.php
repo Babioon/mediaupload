@@ -1,4 +1,13 @@
 <?php
+/**
+ * Fileupload
+ *
+ * @package    Mediaupload
+ * @author     Robert Deutz <rdeutz@googlemail.com>
+ *
+ * @copyright  Robert Deutz
+ * @license    GNU General Public License version 2 or later
+ **/
 
 defined('JPATH_PLATFORM') or die;
 
@@ -174,8 +183,13 @@ class MediauploadFormFieldFileupload extends Mediaupload\Field\Field
 							
 							return;
 						}
-
-						$('#input{$this->id}').val(JSON.stringify(data.result.files));
+						if ($('#input{$this->id}').val() != '') {
+							var formfield = JSON.parse($('#input{$this->id}').val()); 
+							formfield.push(data.result.files[0]);
+						} else {
+							var formfield = data.result.files;
+						}
+						$('#input{$this->id}').val(JSON.stringify(formfield));
 						$('#progress{$this->id}').fadeOut();
 						$('#donemessage{$this->id}').show();
 					},
