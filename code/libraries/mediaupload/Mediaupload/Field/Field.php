@@ -5,7 +5,7 @@
  * @package    Mediaupload
  * @author     Robert Deutz <rdeutz@googlemail.com>
  *
- * @copyright  2014 JandBeyond
+ * @copyright  Robert Deutz
  * @license    GNU General Public License version 2 or later
  **/
 
@@ -15,8 +15,6 @@ namespace Mediaupload\Field;
  * Class Field
  *
  * @package  Mediaupload\Field
- *
- * @since    1.0.0
  */
 abstract class Field extends \JFormField
 {
@@ -34,7 +32,7 @@ abstract class Field extends \JFormField
 
 		// Get the label text from the XML element, defaulting to the element name.
 		$text = $this->element['label'] ? (string) $this->element['label'] : (string) $this->element['name'];
-		$text = $this->translateLabel ? JText::_($text) : $text;
+		$text = $this->translateLabel ? \JText::_($text) : $text;
 
 		// Build the class for the label.
 		$class = !empty($this->description) ? 'hasTooltip' : '';
@@ -47,9 +45,9 @@ abstract class Field extends \JFormField
 		if (!empty($this->description))
 		{
 			// Don't translate discription if specified in the field xml.
-			$description = $this->translateDescription ? JText::_($this->description) : $this->description;
-			JHtml::_('bootstrap.tooltip');
-			$title = JHtml::tooltipText(trim($text, ':'), $description, 0);
+			$description = $this->translateDescription ? \JText::_($this->description) : $this->description;
+			\JHtml::_('bootstrap.tooltip');
+			$title = \JHtml::tooltipText(trim($text, ':'), $description, 0);
 		}
 
 		$data =  array(
