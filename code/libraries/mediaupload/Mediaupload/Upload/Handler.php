@@ -5,7 +5,7 @@
  * @package    Mediaupload
  * @author     Robert Deutz <rdeutz@googlemail.com>
  *
- * @copyright  2014 JandBeyond
+ * @copyright  Robert Deutz
  * @license    GNU General Public License version 2 or later
  **/
 

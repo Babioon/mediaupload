@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Mediaupload
+ *
+ * @package    Mediaupload
+ * @author     Robert Deutz <rdeutz@googlemail.com>
+ *
+ * @copyright  Robert Deutz
+ * @license    GNU General Public License version 2 or later
+ **/
 
 defined('JPATH_PLATFORM') or die;
 
@@ -230,7 +238,7 @@ class MediauploadFormFieldMediaupload extends Mediaupload\Field\Field
 						Mediaupload.Upload.basedir     = '{$baseUploadDir}';
 						Mediaupload.Upload.placeholder = '{$basedir}/media/mediaupload/images/placeholder.png';
 						Mediaupload.Upload.spinner     = '{$basedir}/media/mediaupload/images/loading_small.gif';
-						Mediaupload.Upload.url         = 'index.php?option=com_knowledgeriver&task=upload.save&format=raw';
+						Mediaupload.Upload.url         = 'index.php?option=com_mycomponent&task=upload.file&format=raw';
 				});
 		";
 
